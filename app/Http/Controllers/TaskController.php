@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    // Authentication middleware
     public function __construct(){
-        // $this->middleware('auth');
+        // Authentication middleware
+        $this->middleware('auth');
     }
 
     /**
@@ -18,6 +18,13 @@ class TaskController extends Controller
      */
     public function index()
     {
+        $id = auth()->user()->id;
+        $name = auth()->user()->name;
+        $email = auth()->user()->email;
+
+        return "ID: $id | Name: $name | Email: $email";
+
+        /*
         // Authentication with Helper
         if(auth()->check()){
             $id = auth()->user()->id;
@@ -28,6 +35,7 @@ class TaskController extends Controller
         } else {
             return 'You are not logged in.';
         }
+        */
 
         /*
         // Authentication with import
