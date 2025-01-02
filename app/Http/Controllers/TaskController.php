@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     // Authentication middleware
     public function __construct(){
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -17,7 +18,30 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return 'Test';
+        // Authentication with Helper
+        if(auth()->check()){
+            $id = auth()->user()->id;
+            $name = auth()->user()->name;
+            $email = auth()->user()->email;
+
+            return "ID: $id | Name: $name | Email: $email";
+        } else {
+            return 'You are not logged in.';
+        }
+
+        /*
+        // Authentication with import
+        // use Illuminate\Support\Facades\Auth;
+        if(Auth::check()){
+            $id = Auth::user()->id;
+            $name = Auth::user()->name;
+            $email = Auth::user()->email;
+
+            return "ID: $id | Name: $name | Email: $email";
+        } else {
+            return 'You are not logged in.';
+        }
+         */
     }
 
     /**
