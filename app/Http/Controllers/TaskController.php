@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         // Authentication middleware
         $this->middleware('auth');
     }
@@ -57,7 +58,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('task.create');
     }
 
     /**
@@ -65,7 +66,9 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Task::create($request->all());
+
+        return redirect()->route('task.show', ['task' => $task]);
     }
 
     /**
@@ -73,7 +76,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return view('task.show', ['task' => $task]);
     }
 
     /**
