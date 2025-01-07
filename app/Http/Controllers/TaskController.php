@@ -22,13 +22,15 @@ class TaskController extends Controller
      */
     public function index()
     {
+        $tasks = Task::where('user_id', auth()->user()->id)->paginate(10);
+        return view('task.index', ['tasks' => $tasks]);
+        /*
         $id = auth()->user()->id;
         $name = auth()->user()->name;
         $email = auth()->user()->email;
 
         return "ID: $id | Name: $name | Email: $email";
-        
-        /*
+
         // Authentication with Helper
         if(auth()->check()){
             $id = auth()->user()->id;
