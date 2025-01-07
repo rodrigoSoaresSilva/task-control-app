@@ -27,7 +27,7 @@ class TaskController extends Controller
         $email = auth()->user()->email;
 
         return "ID: $id | Name: $name | Email: $email";
-
+        
         /*
         // Authentication with Helper
         if(auth()->check()){
@@ -69,7 +69,10 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $task = Task::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = auth()->user()->id;
+
+        $task = Task::create($data);
 
         $receiver = auth()->user()->email;
 
