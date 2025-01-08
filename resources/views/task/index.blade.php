@@ -15,6 +15,7 @@
                                     <th scope="col">Tarefa</th>
                                     <th scope="col">Data limite</th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -24,6 +25,15 @@
                                         <td>{{ $task['task'] }}</td>
                                         <td>{{ date('d/m/Y', strtotime($task['deadline'])) }}</td>
                                         <td><a href="{{ route('task.edit', $task['id']) }}">Editar</a></td>
+                                        <td>
+                                            <form id="form_{{ $task['id'] }}" method="post"
+                                                action="{{ route('task.destroy', $task['id']) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a href="#"
+                                                    onclick="document.getElementById('form_{{ $task['id'] }}').submit();">Excluir</a>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
