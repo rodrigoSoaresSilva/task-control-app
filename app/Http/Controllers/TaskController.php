@@ -110,7 +110,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        return view('task.edit', ['task' => $task]);
+        return $task->user_id == auth()->user()->id ? view('task.edit', ['task' => $task]) : view('access-denied');
     }
 
     /**
@@ -118,6 +118,10 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        if($task->user_id != auth()->user()->id){
+            return view('access-denied');
+        }
+
         $validations = [
             'task' => 'required|min:3|max:255',
             'deadline' => 'required|date',
