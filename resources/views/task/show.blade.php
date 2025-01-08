@@ -14,7 +14,7 @@
                                 <input type="date" class="form-control" value="{{ $task->deadline }}">
                             </div>
                         </fieldset>
-                        <a href="{{ url('/task/create') }}" class="btn btn-primary">Voltar</a>
+                        <a href="{{ url()->previous() }}" class="btn btn-primary">Voltar</a>
                     </div>
                 </div>
             </div>

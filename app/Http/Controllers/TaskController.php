@@ -71,6 +71,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $validations = [
+            'task' => 'required|min:3|max:255',
+            'deadline' => 'required|date',
+        ];
+
+        $validation_messages = [
+            'required' => 'O campo deve ser preenchido',
+            'task.min' => 'O campo Tarefa deve ter no mínimo 3 caracteres',
+            'task.max' => 'O campo Tarefa deve ter no máximo 255 caracteres',
+            'deadline.date' => 'O campo Data limite conclusão deve ter uma data válida',
+        ];
+
+        $request->validate($validations, $validation_messages);
+
         $data = $request->all();
         $data['user_id'] = auth()->user()->id;
 
@@ -96,7 +110,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        return view('task.edit', ['task' => $task]);
     }
 
     /**
@@ -104,7 +118,23 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $validations = [
+            'task' => 'required|min:3|max:255',
+            'deadline' => 'required|date',
+        ];
+
+        $validation_messages = [
+            'required' => 'O campo deve ser preenchido',
+            'task.min' => 'O campo Tarefa deve ter no mínimo 3 caracteres',
+            'task.max' => 'O campo Tarefa deve ter no máximo 255 caracteres',
+            'deadline.date' => 'O campo Data limite conclusão deve ter uma data válida',
+        ];
+
+        $request->validate($validations, $validation_messages);
+
+        $task->update($request->all());
+
+        return redirect()->route('task.show', ['task' => $task->id]);
     }
 
     /**
