@@ -5,7 +5,20 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Tarefas <a href="{{ route('task.create') }}" class="float-end">Nova</a></div>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6">
+                                Tarefas
+                            </div>
+                            <div class="col-6">
+                                <div class="float-end">
+                                    <a href="{{ route('task.create') }}">Nova</a>
+                                    <a href="{{ route('task.export', ['extension' => 'xlsx']) }}" class="ms-3">XLSX</a>
+                                    <a href="{{ route('task.export', ['extension' => 'csv']) }}" class="ms-3">CSV</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="card-body">
                         <table class="table">
@@ -40,7 +53,8 @@
                         </table>
                         <nav>
                             <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="{{ $tasks->previousPageUrl() }}">Voltar</a>
+                                <li class="page-item"><a class="page-link"
+                                        href="{{ $tasks->previousPageUrl() }}">Voltar</a>
                                 </li>
                                 @for ($i = 1; $i <= $tasks->lastPage(); $i++)
                                     <li class="page-item {{ $tasks->currentPage() == $i ? 'active' : '' }}"><a

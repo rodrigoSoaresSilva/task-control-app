@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Mail;
 use App\Mail\NewTaskMail;
+use App\Exports\TasksExport;
 
 // use Illuminate\Support\Facades\Auth;
 
@@ -118,7 +119,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        if($task->user_id != auth()->user()->id){
+        if ($task->user_id != auth()->user()->id) {
             return view('access-denied');
         }
 
@@ -146,12 +147,37 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        if($task->user_id != auth()->user()->id){
+        if ($task->user_id != auth()->user()->id) {
             return view('access-denied');
         }
 
         $task->delete();
 
         return redirect()->route('task.index');
+    }
+
+    /**
+     * Exports task data based on the requested file extension.
+     *
+     * This method retrieves the requested file extension from the request (either 'xlsx' or 'csv'). 
+     * If the extension is not provided, it defaults to 'xls'. The extension is then validated 
+     * against a list of permitted extensions. If the requested extension is invalid, the user 
+     * is redirected back to the task index page.
+     * 
+     * If the extension is valid, the method proceeds to export the task data using the 
+     * `TasksExport` class, generating the file in the specified format.
+     */
+    public function export(Request $request)
+    {
+        $permitted_extensions  = ['xlsx', 'csv'];
+        $extension = $request->get('extension') ?? 'xls';
+
+        if(!\in_array($extension, $permitted_extensions )){
+            return redirect()->route('task.index');
+        }
+
+        $exporter = new TasksExport();
+
+        return $exporter->export($extension);
     }
 }
