@@ -51,4 +51,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPasswordNotification($token, $this->email, $this->name));
     }
+
+    public function tasks(){
+        return $this->hasMany('App\Models\Task');
+    }
 }
