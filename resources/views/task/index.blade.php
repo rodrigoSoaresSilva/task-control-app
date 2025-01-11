@@ -13,8 +13,11 @@
                             <div class="col-6">
                                 <div class="float-end">
                                     <a href="{{ route('task.create') }}">Nova</a>
-                                    <a href="{{ route('task.export', ['extension' => 'xlsx']) }}" class="ms-3">XLSX</a>
-                                    <a href="{{ route('task.export', ['extension' => 'csv']) }}" class="ms-3">CSV</a>
+                                    <a href="{{ route('task.export-excel', ['extension' => 'xlsx']) }}"
+                                        class="ms-3">XLSX</a>
+                                    <a href="{{ route('task.export-excel', ['extension' => 'csv']) }}"
+                                        class="ms-3">CSV</a>
+                                    <a href="{{ route('task.export-pdf') }}" target="_blank" class="ms-3">PDF</a>
                                 </div>
                             </div>
                         </div>

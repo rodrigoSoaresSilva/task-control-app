@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Mail;
 use App\Mail\NewTaskMail;
 use App\Exports\TasksExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // use Illuminate\Support\Facades\Auth;
 
@@ -159,25 +160,45 @@ class TaskController extends Controller
     /**
      * Exports task data based on the requested file extension.
      *
-     * This method retrieves the requested file extension from the request (either 'xlsx' or 'csv'). 
-     * If the extension is not provided, it defaults to 'xls'. The extension is then validated 
-     * against a list of permitted extensions. If the requested extension is invalid, the user 
+     * This method retrieves the requested file extension from the request (either 'xlsx' or 'csv').
+     * If the extension is not provided, it defaults to 'xls'. The extension is then validated
+     * against a list of permitted extensions. If the requested extension is invalid, the user
      * is redirected back to the task index page.
-     * 
-     * If the extension is valid, the method proceeds to export the task data using the 
+     *
+     * If the extension is valid, the method proceeds to export the task data using the
      * `TasksExport` class, generating the file in the specified format.
      */
-    public function export(Request $request)
+    public function exportExcel(Request $request)
     {
         $permitted_extensions  = ['xlsx', 'csv'];
         $extension = $request->get('extension') ?? 'xls';
 
-        if(!\in_array($extension, $permitted_extensions )){
-            return redirect()->route('task.index');
+        if (in_array($extension, $permitted_extensions)) {
+            $exporter = new TasksExport();
+            
+            return $exporter->export($extension);
         }
+        
+        return redirect()->route('task.index');
+    }
 
-        $exporter = new TasksExport();
+    /**
+     * Export the user's tasks as a PDF document.
+     *
+     * This method retrieves all tasks associated with the authenticated user,
+     * generates a PDF using the specified view ('task.pdf'), and streams the
+     * PDF to the browser for viewing. The PDF is formatted for A4 paper in
+     * landscape orientation.
+     */
+    public function exportPDF(Request $request)
+    {
+        $tasks = auth()->user()->tasks()->get();
 
-        return $exporter->export($extension);
+        $pdf = Pdf::loadView('task.pdf', ['tasks' => $tasks]);
+
+        $pdf->setPaper('A4', 'landscape');
+
+        // return $pdf->download('tarefas.pdf'); // Forces download
+        return $pdf->stream('tarefas.pdf');
     }
 }
